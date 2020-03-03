@@ -1,9 +1,10 @@
 package com.wsbc.shortener.url;
 
-import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 @Service
 public class UrlShortenerService {
@@ -11,15 +12,15 @@ public class UrlShortenerService {
     @Resource
     UrlShortenRepository urlShortenRepository;
 
-    public ShortUrl createShortUrl(LongUrl longUrl){
-        UrlShorten urlShorten = new UrlShorten(longUrl.getOriginalUrl(), longUrl.getCreatedBy());
-        UrlShorten shorten = urlShortenRepository.save(urlShorten);
-        ShortUrl shortUrl = new ShortUrl();
-        shortUrl.setShortUrl(shorten.getShortUrl());
-        return shortUrl;
+    public UrlShorten createShortUrl(UrlShorten urlShorten){
+        // Find shortrul exists, if so throw exception, otherwise save
+        if (urlShortenRepository.findByShortUrl(urlShorten.getShortUrl()).isPresent()){
+            throw new DuplicateKeyException("ShortURL already exists: " + urlShorten.getShortUrl());
+        }
+        return urlShortenRepository.save(urlShorten);
     }
 
-//    public ShortUrl findShortUrl(ShortUrl shortUrl){
-//        return urlShortenRepository.findby
-//    }
+    public Optional<UrlShorten> findShortUrl(String shortUrl){
+        return urlShortenRepository.findByShortUrl(shortUrl);
+    }
 }

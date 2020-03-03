@@ -14,8 +14,8 @@ public class UrlShortenController {
     UrlShortenerService urlShortenerService;
 
     @PostMapping("/shorten")
-    public ShortUrl createShortUrl(@Valid @RequestBody LongUrl longUrl){
-        return urlShortenerService.createShortUrl(longUrl);
+    public UrlShorten createShortUrl(@Valid @RequestBody UrlShorten urlShorten){
+        return urlShortenerService.createShortUrl(urlShorten);
     }
 
 

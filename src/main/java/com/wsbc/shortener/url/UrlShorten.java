@@ -19,16 +19,16 @@ public class UrlShorten implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long url_id;
 
-    @Column(name = "originalUrl")
-    private String originalUrl;
-
     @Column(name = "shortUrl")
     private String shortUrl;
+
+    @Column(name = "originalUrl")
+    private String originalUrl;
 
     @Column(name = "click")
     private int click;
 
-    @Column(name = "createdBy")
+    @Column(name = "createdby")
     private String createdBy;
 
     @CreationTimestamp
@@ -36,8 +36,6 @@ public class UrlShorten implements Serializable {
     @Setter(AccessLevel.NONE)
     private Date last_updated;
 
-    public UrlShorten(String originalUrl, String createdBy){
-        this.originalUrl = originalUrl;
-        this.createdBy = createdBy;
+    public UrlShorten(){
     }
 }

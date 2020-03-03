@@ -1,8 +1,7 @@
 ------------------------------------
 ----------- URL Shorten ------------
 ------------------------------------
-
-CREATE SEQUENCE public.url_id_seq
+CREATE SEQUENCE public.urlshorten_url_id_seq
     START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
@@ -11,9 +10,9 @@ CREATE SEQUENCE public.url_id_seq
 
 -- Create Table
 CREATE TABLE public.urlShorten (
-    url_id integer NOT NULL DEFAULT nextval('url_id_seq'),
+    url_id integer NOT NULL DEFAULT nextval('urlshorten_url_id_seq'),
+    shortUrl character varying(200) NOT NULL,
     originalUrl character varying(2048) NOT NULL,
-  	shortUrl character varying(200) NOT NULL,  
   	click integer NOT NULL,
     createdBy character varying(200) NOT NULL,
     last_update timestamp without time zone DEFAULT now() NOT NULL,
@@ -24,13 +23,13 @@ CREATE TABLE public.urlShorten (
 ALTER TABLE public.urlShorten OWNER TO postgres;
 -- Alter Sequence Owned by the table primary key to make it more efficient
 -- This means when student table is deleted, automatically delete this sequence.
-ALTER SEQUENCE public.url_id_seq OWNED BY public.urlShorten.url_id;
+ALTER SEQUENCE public.urlshorten_url_id_seq OWNED BY public.urlShorten.url_id;
 -- END OF URLShorten --
 
 ------------------------------------
 ----------- URL Log ------------
 ------------------------------------
-CREATE SEQUENCE public.url_log_id_seq
+CREATE SEQUENCE public.urlshorten_url_log_id_seq
     START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
@@ -39,8 +38,9 @@ CREATE SEQUENCE public.url_log_id_seq
 
 -- Create Table
 CREATE TABLE public.urlLog (
-    url_log_id integer NOT NULL DEFAULT nextval('url_log_id_seq'),
+    url_log_id integer NOT NULL DEFAULT nextval('urlshorten_url_log_id_seq'),
     url_id integer NOT NULL,
+    shortUrl character varying(200) NOT NULL,
     last_accessed timestamp without time zone NOT NULL,
     CONSTRAINT url_log_id_pk PRIMARY KEY (url_log_id)
 );
@@ -49,7 +49,7 @@ CREATE TABLE public.urlLog (
 ALTER TABLE public.urlLog OWNER TO postgres;
 -- Alter Sequence Owned by the table primary key to make it more efficient
 -- This means when student table is deleted, automatically delete this sequence.
-ALTER SEQUENCE public.url_log_id_seq OWNED BY public.urlLog.url_log_id;
+ALTER SEQUENCE public.urlshorten_url_log_id_seq OWNED BY public.urlLog.url_log_id;
 -- END OF URLShorten --
 
 ----------------------------------------------------
