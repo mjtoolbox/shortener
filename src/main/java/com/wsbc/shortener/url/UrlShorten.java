@@ -1,5 +1,7 @@
 package com.wsbc.shortener.url;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wsbc.shortener.log.UrlLog;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -8,6 +10,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -24,7 +28,7 @@ public class UrlShorten implements Serializable {
     @Id
     @Column(name = "url_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long url_id;
+    private long urlId;
 
     @Column(name = "shortUrl")
     private String shortUrl;
@@ -43,9 +47,9 @@ public class UrlShorten implements Serializable {
     @Setter(AccessLevel.NONE)
     private Date last_updated;
 
-//    @OneToMany(mappedBy = "urlshorten", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private Set<UrlLog> urlLogs = new HashSet<UrlLog>();
+    @OneToMany(mappedBy = "urlShorten", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<UrlLog> urlLogs = new HashSet<UrlLog>();
 
     public void increaseClick(){
         this.click ++;
