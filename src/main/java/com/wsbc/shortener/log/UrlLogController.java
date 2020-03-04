@@ -19,4 +19,5 @@ public class UrlLogController {
     public List<UrlLog> retrieveLogByShortUrl(@PathVariable("shortUrl") String shortUrl){
         return urlLogService.retrieveLogByShortUrl(shortUrl);
     }
+
 }

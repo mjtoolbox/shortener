@@ -1,5 +1,6 @@
 package com.wsbc.shortener.url;
 
+import com.wsbc.shortener.log.UrlLogService;
 import com.wsbc.shortener.util.UrlAlreadyExistException;
 import com.wsbc.shortener.util.UrlNotFoundException;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,9 @@ public class UrlShortenerService {
 
     @Resource
     UrlShortenRepository urlShortenRepository;
+
+    @Resource
+    UrlLogService urlLogService;
 
     public UrlShorten createShortUrl(UrlShorten urlShorten){
         // Find shortrul exists, if so throw exception, otherwise save
@@ -29,6 +33,7 @@ public class UrlShortenerService {
         UrlShorten foundUrlShorten = urlShortenRepository.findByShortUrl(shortUrl);
         if (foundUrlShorten != null){
             foundUrlShorten.increaseClick();
+            urlLogService.persistLog(shortUrl);
             return urlShortenRepository.save(foundUrlShorten);
         }else{
             throw new UrlNotFoundException("ShortURL not found!" + shortUrl);

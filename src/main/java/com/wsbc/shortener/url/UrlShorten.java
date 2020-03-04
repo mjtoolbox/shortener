@@ -54,4 +54,5 @@ public class UrlShorten implements Serializable {
     public void increaseClick(){
         this.click ++;
     }
+
 }

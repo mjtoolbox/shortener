@@ -29,6 +29,9 @@ public class UrlLog implements Serializable {
     @Column(name = "url_id", insertable = false, updatable = false)
     private long urlId;
 
+    @Column(name = "shorturl")
+    private String shortUrl;
+
     @Column(name = "last_accessed")
     private Date last_accessed;
 
