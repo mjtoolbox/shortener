@@ -9,5 +9,13 @@ import javax.annotation.Resource;
 public class UrlLogService {
 
     @Resource
+    UrlLogRepository urlLogRepository;
+
+    @Resource
     UrlShortenRepository urlShortenRepository;
+
+//    public List<UrlLog> retrieveLogByShortUrl(String shortUrl){
+//       UrlShorten urlShorten =  urlShortenRepository.findByShortUrl(shortUrl);
+//       return urlLogRepository.findByUrlShorten(urlShorten);
+//    }
 }

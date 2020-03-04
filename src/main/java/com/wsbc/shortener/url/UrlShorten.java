@@ -14,6 +14,13 @@ import java.util.Date;
 @Table(name = "urlshorten", schema = "public")
 public class UrlShorten implements Serializable {
 
+    public UrlShorten(){
+    }
+
+    public UrlShorten(String shortUrl) {
+        this.shortUrl = shortUrl;
+    }
+
     @Id
     @Column(name = "url_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +43,11 @@ public class UrlShorten implements Serializable {
     @Setter(AccessLevel.NONE)
     private Date last_updated;
 
-    public UrlShorten(){
+//    @OneToMany(mappedBy = "urlshorten", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private Set<UrlLog> urlLogs = new HashSet<UrlLog>();
+
+    public void increaseClick(){
+        this.click ++;
     }
 }

@@ -56,7 +56,7 @@ ALTER SEQUENCE public.urlshorten_url_log_id_seq OWNED BY public.urlLog.url_log_i
 ----------------- DEFINE RELATIONSHIP --------------
 ----------------------------------------------------
 ALTER TABLE ONLY public.urlLog
-    ADD CONSTRAINT url_id_pk FOREIGN KEY (url_id) REFERENCES public.urlShorten(url_id) ON DELETE CASCADE;
+    ADD CONSTRAINT url_id_pk FOREIGN KEY (url_id) REFERENCES public.urlshorten(url_id) ON DELETE CASCADE;
 
 
 ---------------------------------------------------
@@ -88,3 +88,16 @@ ALTER FUNCTION public.last_updated() OWNER TO postgres;
 
 -- Add last_updated column to all tables
 CREATE TRIGGER last_updated BEFORE UPDATE ON urlShorten FOR EACH ROW EXECUTE PROCEDURE last_updated();
+
+
+----------------------------------------------------
+--------------- SAMPLE DATA ------------------------
+----------------------------------------------------
+
+INSERT INTO public.urlshorten(
+	shorturl, originalurl, click, createdby, last_update)
+	VALUES ( '1', 'https://globalnews.ca/news/6624856/bc-covid-update-tuesday', '7', 'Michael', '2020-03-03');
+
+INSERT INTO public.urllog(
+ url_id, shorturl, last_accessed)
+VALUES ('1000', '1', '2020-03-03');

@@ -5,5 +5,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.Optional;
 
 public interface UrlShortenRepository extends PagingAndSortingRepository<UrlShorten, Long> {
-    Optional<UrlShorten> findByShortUrl(String shortUrl);
+    UrlShorten findByShortUrl(String shortUrl);
 }
