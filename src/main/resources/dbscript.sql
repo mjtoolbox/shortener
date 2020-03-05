@@ -1,3 +1,7 @@
+---------------------------------------------------------------------
+-- IMPORTANT: Replace 'postgres' with Azure Postgres owner e.g. wsbc
+---------------------------------------------------------------------
+
 ------------------------------------
 ----------- URL Shorten ------------
 ------------------------------------
@@ -38,7 +42,7 @@ CREATE SEQUENCE public.urlshorten_url_log_id_seq
 
 -- Create Table
 CREATE TABLE public.urlLog (
-    url_log_id integer NOT NULL DEFAULT nextval('urlshorten_url_log_id_seq'),
+    url_log_id integer NOT NULL DEFAULT nextval('urlLog_url_log_id_seq'),
     url_id integer NOT NULL,
     shortUrl character varying(200) NOT NULL,
     last_accessed timestamp without time zone NOT NULL,
@@ -49,7 +53,7 @@ CREATE TABLE public.urlLog (
 ALTER TABLE public.urlLog OWNER TO postgres;
 -- Alter Sequence Owned by the table primary key to make it more efficient
 -- This means when student table is deleted, automatically delete this sequence.
-ALTER SEQUENCE public.urlshorten_url_log_id_seq OWNED BY public.urlLog.url_log_id;
+ALTER SEQUENCE public.urlLog_url_log_id_seq OWNED BY public.urlLog.url_log_id;
 -- END OF URLShorten --
 
 ----------------------------------------------------
