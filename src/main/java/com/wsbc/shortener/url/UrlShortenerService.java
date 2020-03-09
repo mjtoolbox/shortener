@@ -16,12 +16,30 @@ public class UrlShortenerService {
     @Resource
     UrlLogService urlLogService;
 
-    public UrlShorten createShortUrl(UrlShorten urlShorten){
+    public UrlShorten createShortUrl(UrlShorten urlShorten) throws UrlAlreadyExistException{
         // Find shortrul exists, if so throw exception, otherwise save
         if (urlShortenRepository.findByShortUrl(urlShorten.getShortUrl()) != null){
             throw new UrlAlreadyExistException("ShortURL already exists: " + urlShorten.getShortUrl());
         }
         return urlShortenRepository.save(urlShorten);
+    }
+
+    /**
+     * Return UrlTransferObject
+     * @param shortUrl
+     * @return
+     */
+    public UrlTransferObject checkDuplicate(String shortUrl){
+        UrlShorten foundUrlShorten = urlShortenRepository.findByShortUrl(shortUrl);
+        UrlTransferObject urlTransferObject = new UrlTransferObject();
+        if (foundUrlShorten != null){
+            urlTransferObject.setShortUrl(foundUrlShorten.getShortUrl());
+            urlTransferObject.setOriginalUrl(foundUrlShorten.getOriginalUrl());
+            urlTransferObject.setDuplicate(true);
+        }else{
+            urlTransferObject.setDuplicate(false);
+        }
+        return urlTransferObject;
     }
 
     /**

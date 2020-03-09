@@ -2,7 +2,9 @@ package com.wsbc.shortener.url;
 
 import com.wsbc.shortener.util.UrlAlreadyExistException;
 import com.wsbc.shortener.util.UrlNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -19,11 +21,18 @@ public class UrlShortenController {
 
     @PostMapping("/shorten")
     public UrlShorten createShortUrl(@Valid @RequestBody UrlShorten urlShorten){
-        if (urlShortenerService.findShortUrl(urlShorten.getShortUrl()) != null){
-            throw new UrlAlreadyExistException("ShortURL already exists: " + urlShorten.getShortUrl());
+        try {
+            return urlShortenerService.createShortUrl(urlShorten);
+        }catch (UrlAlreadyExistException ec){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "ShortURL already exists", ec);
         }
-        return urlShortenerService.createShortUrl(urlShorten);
     }
+
+    @GetMapping("/checkDuplicate/{shortUrl}")
+    public UrlTransferObject checkDuplicate(@PathVariable("shortUrl") String shortUrl){
+        return urlShortenerService.checkDuplicate(shortUrl);
+    }
+
 
     @GetMapping("/redirect/{shortUrl}")
     public ModelAndView redirectToOriginalUrl(@PathVariable("shortUrl") String shortUrl){
