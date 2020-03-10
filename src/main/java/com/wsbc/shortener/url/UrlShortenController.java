@@ -1,14 +1,16 @@
 package com.wsbc.shortener.url;
 
-import com.wsbc.shortener.util.UrlAlreadyExistException;
 import com.wsbc.shortener.util.UrlNotFoundException;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @CrossOrigin()
 @RestController
@@ -20,33 +22,82 @@ public class UrlShortenController {
     UrlShortenRepository urlShortenRepository;
 
     @PostMapping("/shorten")
-    public UrlShorten createShortUrl(@Valid @RequestBody UrlShorten urlShorten){
-        try {
-            return urlShortenerService.createShortUrl(urlShorten);
-        }catch (UrlAlreadyExistException ec){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "ShortURL already exists", ec);
-        }
+    public UrlTransferObject createShortUrl(@Valid @RequestBody UrlShorten urlShorten) {
+        return urlShortenerService.createShortUrl(urlShorten);
     }
 
     @GetMapping("/checkDuplicate/{shortUrl}")
-    public UrlTransferObject checkDuplicate(@PathVariable("shortUrl") String shortUrl){
+    public UrlTransferObject checkDuplicate(@PathVariable("shortUrl") String shortUrl) {
         return urlShortenerService.checkDuplicate(shortUrl);
     }
 
 
+    /**
+     * DNS Server should map "http://go" to "http://localhost:8080/redirect"
+     * where localhost:8080 should be replaced with Azure Web App IP address and its port.
+     *
+     * @param shortUrl
+     * @return
+     */
     @GetMapping("/redirect/{shortUrl}")
-    public ModelAndView redirectToOriginalUrl(@PathVariable("shortUrl") String shortUrl){
-        UrlShorten urlShorten = urlShortenerService.findShortUrl(shortUrl);
-        return new ModelAndView("redirect:" + urlShorten.getOriginalUrl());
+    public ModelAndView redirectToOriginalUrl(@PathVariable("shortUrl") String shortUrl) {
+        ModelAndView modelAndView = new ModelAndView();
+        try {
+            UrlShorten urlShorten = urlShortenerService.redirectShortUrl(shortUrl);
+            modelAndView.setViewName("redirect:" + urlShorten.getOriginalUrl());
+        } catch (UrlNotFoundException ec) {
+            modelAndView.setViewName("error.html");
+        }
+        return modelAndView;
     }
 
-    @GetMapping("/display/{shortUrl}")
-    public UrlShorten getUrlShorten(@PathVariable String shortUrl){
+    /**
+     * Admin method, skip Service layer.
+     * @param urlId
+     * @return
+     * @throws UrlNotFoundException
+     */
+    @GetMapping("/urls/{urlId}")
+    public UrlShorten getUrlShorten(@PathVariable Long urlId) throws UrlNotFoundException {
+        return  urlShortenRepository.findById(urlId)
+                .orElseThrow(() -> new ResourceNotFoundException("URL not found by ID: " + urlId));
+    }
 
-        UrlShorten urlShorten = urlShortenerService.findShortUrlWithoutClickIncrease(shortUrl);
-        if (urlShorten == null){
-            throw new UrlNotFoundException("ShortURL not found: " + shortUrl);
-        }
-       return urlShorten;
+    /**
+     * Admin method, skip Service layer.
+     * @return
+     */
+    @GetMapping("/urls")
+    public List<UrlShorten> retrieveAllUrlShorten(){
+        return StreamSupport.stream(urlShortenRepository.findAll(Sort.by("urlId")).spliterator(), false)
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Admin method, skip Service layer.
+     * Cannot set shortUrl as it is treated as PK.
+     * @return
+     */
+    @PutMapping("/urls/{urlId}")
+    public UrlShorten updateUrlShorten(@PathVariable long urlId, @Valid @RequestBody UrlShorten urlShorten){
+        UrlShorten foundUrl = urlShortenRepository.findById(urlId)
+                .orElseThrow(() -> new ResourceNotFoundException("URL not found by ID: " + urlId));
+        foundUrl.setOriginalUrl(urlShorten.getOriginalUrl());
+        foundUrl.setCreatedBy(urlShorten.getCreatedBy());
+        foundUrl.setClick(0);
+        return urlShortenRepository.save(foundUrl);
+    }
+
+
+    /**
+     * Admin method, skip Service layer.
+     * @return
+     */
+    @DeleteMapping("/urls/{urlId}")
+    public void delete(@PathVariable long urlId){
+        UrlShorten foundUrl = urlShortenRepository.findById(urlId)
+                .orElseThrow(() -> new ResourceNotFoundException("URL not found by ID: " + urlId));
+        urlShortenRepository.deleteById(urlId);
     }
 }

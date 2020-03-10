@@ -3,7 +3,7 @@ package com.wsbc.shortener;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication()
 public class ShortenerApplication {
 
 	public static void main(String[] args) {

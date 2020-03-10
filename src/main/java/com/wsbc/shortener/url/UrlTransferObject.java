@@ -1,19 +1,15 @@
 package com.wsbc.shortener.url;
 
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-
-import javax.persistence.Column;
 import java.io.Serializable;
-import java.util.Date;
 
+/**
+ * This TO class is to help easy manipulation of UI. UrlShorten entity has more attributes.
+ */
 public class UrlTransferObject implements Serializable {
 
     private String shortUrl;
     private String originalUrl;
-    private boolean isDuplicate;
+    private boolean duplicate;
 
     public UrlTransferObject() {
     }
@@ -34,11 +30,11 @@ public class UrlTransferObject implements Serializable {
         this.originalUrl = originalUrl;
     }
 
-    public boolean isDuplicate() {
-        return isDuplicate;
+    public boolean getDuplicate() {
+        return duplicate;
     }
 
     public void setDuplicate(boolean duplicate) {
-        isDuplicate = duplicate;
+        this.duplicate = duplicate;
     }
 }
