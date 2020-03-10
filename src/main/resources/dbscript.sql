@@ -33,7 +33,7 @@ ALTER SEQUENCE public.urlshorten_url_id_seq OWNED BY public.urlShorten.url_id;
 ------------------------------------
 ----------- URL Log ------------
 ------------------------------------
-CREATE SEQUENCE public.urlshorten_url_log_id_seq
+CREATE SEQUENCE public.urlLog_url_log_id_seq
     START WITH 1000
     INCREMENT BY 1
     NO MINVALUE
