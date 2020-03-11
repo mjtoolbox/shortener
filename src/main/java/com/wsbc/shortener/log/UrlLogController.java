@@ -15,6 +15,10 @@ public class UrlLogController {
     @Resource
     UrlLogService urlLogService;
 
+    @Resource
+    UrlLogRepository urlLogRepository;
+
+
     @GetMapping("/logs/{shortUrl}")
     public List<UrlLog> retrieveLogByShortUrl(@PathVariable("shortUrl") String shortUrl){
         return urlLogService.retrieveLogByShortUrl(shortUrl);

@@ -29,7 +29,7 @@ public class UrlLogService {
        if (urlShorten == null){
            throw new UrlNotFoundException("ShortURL not found!" + shortUrl);
        }
-       return urlLogRepository.findByShortUrl(shortUrl);
+       return urlLogRepository.findByShortUrlDesc(shortUrl);
     }
 
     public void persistLog(String shortUrl){
