@@ -20,7 +20,7 @@ public class UrlLogService {
 
 
     /**
-     * Retrieve click logs by
+     * Retrieve access log by shortUrl
      * @param shortUrl
      * @return
      */
@@ -29,13 +29,12 @@ public class UrlLogService {
        if (urlShorten == null){
            throw new UrlNotFoundException("ShortURL not found!" + shortUrl);
        }
-       return urlLogRepository.findByShortUrlDesc(shortUrl);
+       return urlLogRepository.findByShortUrlOrderByLastAccessedDesc(shortUrl);
     }
 
+
     public void persistLog(String shortUrl){
-
         UrlShorten urlShorten =  urlShortenRepository.findByShortUrl(shortUrl);
-
         UrlLog urlLog = new UrlLog(urlShorten.getUrlId(),shortUrl, new Date());
         urlLogRepository.save(urlLog);
     }

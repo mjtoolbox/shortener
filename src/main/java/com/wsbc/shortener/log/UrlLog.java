@@ -1,11 +1,7 @@
 package com.wsbc.shortener.log;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wsbc.shortener.url.UrlShorten;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -35,11 +31,12 @@ public class UrlLog implements Serializable {
     private String shortUrl;
 
     @Column(name = "last_accessed")
-    private Date last_accessed;
+    private Date lastAccessed;
 
-    public UrlLog(long urlId, String shortUrl, Date last_accessed){
+
+    public UrlLog(long urlId, String shortUrl, Date lastAccessed){
         this.urlId = urlId;
         this.shortUrl = shortUrl;
-        this.last_accessed = last_accessed;
+        this.lastAccessed = lastAccessed;
     }
 }

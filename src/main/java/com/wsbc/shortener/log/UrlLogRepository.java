@@ -5,5 +5,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 
 public interface UrlLogRepository extends PagingAndSortingRepository<UrlLog, Long> {
-    List<UrlLog> findByShortUrlDesc(String shortUrl);
+    List<UrlLog> findByShortUrlOrderByLastAccessedDesc(String shortUrl);
 }
