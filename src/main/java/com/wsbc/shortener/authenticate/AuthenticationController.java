@@ -21,7 +21,7 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/login")
-    public Credentials createAuthenticationToken(@Valid@RequestBody Credentials credentials) throws Exception {
+    public Credentials createAuthentication(@Valid@RequestBody Credentials credentials) throws Exception {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         credentials.getUsername(),
