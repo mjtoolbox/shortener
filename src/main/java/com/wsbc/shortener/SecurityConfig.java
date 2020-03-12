@@ -27,7 +27,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-//       auth.inMemoryAuthentication().withUser("admin").password(new BCryptPasswordEncoder().encode("{noop}password")).roles("ADMIN");
         auth.inMemoryAuthentication().withUser("admin").password("{noop}password").roles("ADMIN");
     }
 
@@ -57,8 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 // Don't authenticate this particular request
-//                .authorizeRequests().antMatchers("/**").permitAll()
-                .authorizeRequests().antMatchers("/", "/login","/shorten", "/redirect/**", "/checkDuplicate/**").permitAll()
+                .authorizeRequests()
+                .antMatchers("/**").permitAll()
                 // All other request need to be authenticated
                 .anyRequest().authenticated()
                 .and()

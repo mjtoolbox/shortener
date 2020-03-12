@@ -31,9 +31,4 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return new Credentials(credentials.getUsername(), new Date());
     }
-
-//    @RequestMapping(value = "/logout", method = RequestMethod.POST)
-//    public void logout() throws AuthenticationException {
-//        return new JwtResponse(200, "success", null, null, null, null);
-//    }
 }

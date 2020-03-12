@@ -21,6 +21,7 @@ public class Credentials implements Serializable {
     public Credentials(String username, Date loggedin) {
         this.username = username;
         this.loggedin = loggedin;
+        this.password = "";
     }
 
     public String getUsername() {
@@ -46,4 +47,6 @@ public class Credentials implements Serializable {
     public void setLoggedin(Date loggedin) {
         this.loggedin = loggedin;
     }
+
+    
 }
