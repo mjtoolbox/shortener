@@ -48,5 +48,5 @@ public class Credentials implements Serializable {
         this.loggedin = loggedin;
     }
 
-    
+
 }
