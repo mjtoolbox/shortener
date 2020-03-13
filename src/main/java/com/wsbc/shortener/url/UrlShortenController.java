@@ -1,10 +1,12 @@
 package com.wsbc.shortener.url;
 
 import com.wsbc.shortener.util.UrlNotFoundException;
+import io.swagger.annotations.Api;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -33,13 +35,13 @@ public class UrlShortenController {
 
 
     /**
-     * DNS Server should map "http://go" to "http://localhost:8080/redirect"
+     * DNS Server should map "http://go" to "http://localhost:8080/"
      * where localhost:8080 should be replaced with Azure Web App IP address and its port.
      *
      * @param shortUrl
      * @return
      */
-    @GetMapping("/redirect/{shortUrl}")
+    @GetMapping("/{shortUrl}")
     public ModelAndView redirectToOriginalUrl(@PathVariable("shortUrl") String shortUrl) {
         ModelAndView modelAndView = new ModelAndView();
         try {
@@ -57,6 +59,7 @@ public class UrlShortenController {
      * @return
      * @throws UrlNotFoundException
      */
+    @ApiIgnore
     @GetMapping("/urls/{urlId}")
     public UrlShorten getUrlShorten(@PathVariable Long urlId) throws UrlNotFoundException {
         return  urlShortenRepository.findById(urlId)
